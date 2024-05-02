@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500">
+  <!-- Sand -->
+  <rect width="500" height="500" fill="#f0e68c" />
+  
+  <!-- Sea Shells -->
+  <circle cx="100" cy="400" r="20" fill="#fffacd" />
+  <circle cx="200" cy="350" r="30" fill="#fffacd" />
+  <circle cx="300" cy="400" r="25" fill="#fffacd" />
+  <!-- Draw lines between shells -->
+  <line x1="100" y1="400" x2="200" y2="350" stroke="#8b4513" stroke-width="2" />
+  <line x1="200" y1="350" x2="300" y2="400" stroke="#8b4513" stroke-width="2" />
+  
+  <!-- Crab -->
+  <path d="M350 300 Q370 270 400 300 Q430 270 450 300 Q470 270 500 300 Q470 330 450 300 Q430 330 400 300 Q370 330 350 300 Z" fill="#cd5c5c" />
+  <!-- Eyes -->
+  <circle cx="380" cy="310" r="5" fill="black" />
+  <circle cx="420" cy="310" r="5" fill="black" />
+</svg>
