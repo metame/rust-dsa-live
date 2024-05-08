@@ -50,23 +50,21 @@ impl<T> LinkedList<T> {
         }
     }
 
-    pub fn split(mut self, at: usize) -> (Self, Option<Self>) {
+    pub fn split_off(&mut self, at: usize) -> Option<Self> {
         let mut next = &mut self.head;
         let mut i = 0;
-        let mut split = None;
         while let Some(n) = next {
-            if (i + 1) == at {
+            i += 1;
+            if i == at {
                 let mut l = LinkedList::new();
                 l.head = n.next.take();
-                l.len = self.len - i - 1;
-
+                l.len = self.len - i;
                 self.len -= l.len;
-                split = Some(l);
+                return Some(l);
             }
-            i += 1;
             next = &mut n.next;
         }
-        (self, split)
+        None
     }
 
     pub fn append(&mut self, l: Self) {
@@ -102,18 +100,18 @@ mod tests {
         l.push_front(2);
         assert_eq!(l.len, 4);
 
-        let (mut split, l) = l.split(1);
-        assert!(l.is_some());
-        let mut l = l.unwrap();
-        assert_eq!(split.len, 1);
-        assert_eq!(split.pop_front(), Some(2));
-        assert_eq!(l.pop_front(), Some(3));
-        assert!(l.head.is_some());
-        assert_eq!(l.len, 2);
-        assert_eq!(l.pop_front(), Some(4));
-        assert_eq!(l.pop_front(), Some(5));
-        assert!(l.head.is_none());
-        assert_eq!(l.len, 0);
+        let split = l.split_off(1);
+        assert!(split.is_some());
+        let mut split = split.unwrap();
+        assert_eq!(split.pop_front(), Some(3));
+        assert!(split.head.is_some());
+        assert_eq!(split.len, 2);
+        assert_eq!(split.pop_front(), Some(4));
+        assert_eq!(split.pop_front(), Some(5));
+        assert!(split.head.is_none());
+        assert_eq!(split.len, 0);
+        assert_eq!(l.len, 1);
+        assert_eq!(l.pop_front(), Some(2));
 
 
         l.push_front(5);
