@@ -42,13 +42,7 @@ impl<T> DoublyLinkedList<T> {
             n.next = Some(old_first.clone());
             let link = Arc::new(Mutex::new(n));
             self.first = Some(link.clone());
-            old_first
-                .clone()
-                .lock()
-                .map(|mut n| {
-                    n.prev = Some(link);
-                })
-                .unwrap();
+            old_first.lock().unwrap().prev = Some(link);
         } else {
             let link = Arc::new(Mutex::new(n));
             self.first = Some(link.clone());
@@ -63,13 +57,7 @@ impl<T> DoublyLinkedList<T> {
             n.prev = Some(old_last.clone());
             let link = Arc::new(Mutex::new(n));
             self.last = Some(link.clone());
-            old_last
-                .clone()
-                .lock()
-                .map(|mut n| {
-                    n.next = Some(link);
-                })
-                .unwrap();
+            old_last.lock().unwrap().next = Some(link);
         } else {
             let link = Arc::new(Mutex::new(n));
             self.first = Some(link.clone());
@@ -80,9 +68,8 @@ impl<T> DoublyLinkedList<T> {
 
     fn pop_front(&mut self) -> Option<T> {
         if let Some(first) = self.first.take() {
-            first
-                .lock()
-                .map(|mut old_first| {
+            first.lock().
+                map(|mut old_first| {
                     if let Some(first_node) = old_first.next.take() {
                         self.first = Some(first_node.clone());
                         let mut first_node = first_node.lock().unwrap();
@@ -92,6 +79,7 @@ impl<T> DoublyLinkedList<T> {
                     }
                 })
                 .unwrap();
+
             self.len -= 1;
 
             Arc::into_inner(first)
@@ -104,8 +92,7 @@ impl<T> DoublyLinkedList<T> {
 
     fn pop_back(&mut self) -> Option<T> {
         if let Some(last) = self.last.take() {
-            last
-                .lock()
+            last.lock()
                 .map(|mut old_last| {
                     if let Some(last_node) = old_last.prev.take() {
                         self.last = Some(last_node.clone());
@@ -116,6 +103,7 @@ impl<T> DoublyLinkedList<T> {
                     }
                 })
                 .unwrap();
+
             self.len -= 1;
 
             Arc::into_inner(last)
@@ -128,9 +116,11 @@ impl<T> DoublyLinkedList<T> {
 
     fn append(&mut self, l: Self) {
         if let Some(last) = self.last.take() {
-            last.lock().map(|mut old_last| {
-                old_last.next = l.first.clone();
-            }).unwrap();
+            last.lock()
+                .map(|mut old_last| {
+                    old_last.next = l.first.clone();
+                })
+                .unwrap();
         } else {
             self.first = l.first.clone();
         }
@@ -187,8 +177,5 @@ mod tests {
         assert_eq!(l.pop_front(), Some(10));
         assert_eq!(l.pop_front(), Some(3));
         assert_eq!(l.pop_front(), Some(7));
-
-
-
     }
 }
