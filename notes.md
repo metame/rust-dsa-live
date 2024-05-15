@@ -38,6 +38,7 @@ Also, great chance for me to practice more Rust and DSA stuff on a personal leve
 - ring buffer
 - binary search tree
 - priority queue/min heap
+- use pq for dijkstra's
 - hashmap
 - harder stuff (prefix tree/trie, b tree, r/b trees, avl, matrix stuff)
 

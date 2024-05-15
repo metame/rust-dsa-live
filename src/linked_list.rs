@@ -1,15 +1,15 @@
 #![allow(dead_code)]
 
 #[derive(Debug, PartialEq)]
-struct Node<T> {
-    value: T,
-    next: Option<Box<Node<T>>>,
-}
-
-#[derive(Debug, PartialEq)]
 pub struct LinkedList<T> {
     len: usize,
     head: Option<Box<Node<T>>>,
+}
+
+#[derive(Debug, PartialEq)]
+struct Node<T> {
+    value: T,
+    next: Option<Box<Node<T>>>,
 }
 
 impl<T> Node<T> {
