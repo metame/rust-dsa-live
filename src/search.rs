@@ -5,14 +5,15 @@ Because of using recursive operations on slices and lack of TCO in Rust,
 the functions operating on slices can stack overflow on large slices
 */
 fn linear_search<T, U, P>(mut it: U, p: P) -> Option<T>
-where T: PartialEq,
-      U: Iterator<Item=T>,
-      P: Fn(&T) -> bool,
+where
+    T: PartialEq,
+    U: Iterator<Item = T>,
+    P: Fn(&T) -> bool,
 {
     match it.next() {
         Some(a) if p(&a) => Some(a),
         Some(_) => linear_search(it, p),
-        None => None
+        None => None,
     }
 }
 
@@ -33,15 +34,19 @@ fn do_linear_search_slice<T: PartialEq>(s: &[T], q: &T, i: usize) -> Option<usiz
 }
 
 fn binary_search<T>(s: &[T], q: &T) -> Option<usize>
-where T: PartialOrd + PartialEq + std::fmt::Debug
+where
+    T: PartialOrd + PartialEq + std::fmt::Debug,
 {
     do_binary_search(s, q, 0, s.len())
 }
 
 fn do_binary_search<T>(s: &[T], q: &T, low: usize, high: usize) -> Option<usize>
-where T: PartialOrd + PartialEq
+where
+    T: PartialOrd + PartialEq,
 {
-    if low >= high { return None; }
+    if low >= high {
+        return None;
+    }
 
     let mid = (high + low) / 2;
 
@@ -55,7 +60,8 @@ where T: PartialOrd + PartialEq
 }
 
 fn binary_search_rec<T>(s: &[T], q: &T) -> Option<usize>
-where T: PartialOrd + PartialEq
+where
+    T: PartialOrd + PartialEq,
 {
     let mid = s.len() / 2;
 
@@ -64,8 +70,7 @@ where T: PartialOrd + PartialEq
     } else if q < &s[mid] && s.len() > 1 {
         binary_search_rec(&s[..mid], q)
     } else if q > &s[mid] && s.len() > 1 && (mid + 1) < s.len() {
-        binary_search_rec(&s[mid+1..], q)
-            .and_then(|i| Some(i + mid + 1))
+        binary_search_rec(&s[mid + 1..], q).and_then(|i| Some(i + mid + 1))
     } else {
         None
     }

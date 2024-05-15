@@ -1,2 +1,3 @@
-mod search;
+mod doubly_linked_list;
 mod linked_list;
+mod search;

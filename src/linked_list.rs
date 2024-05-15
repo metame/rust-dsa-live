@@ -14,19 +14,13 @@ struct Node<T> {
 
 impl<T> Node<T> {
     fn new(value: T) -> Self {
-        Node {
-            value,
-            next: None,
-        }
+        Node { value, next: None }
     }
 }
 
 impl<T> LinkedList<T> {
     pub fn new() -> Self {
-        LinkedList {
-            len: 0,
-            head: None,
-        }
+        LinkedList { len: 0, head: None }
     }
 
     pub fn push_front(&mut self, value: T) {
@@ -84,7 +78,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn linked_list_works () {
+    fn linked_list_works() {
         let mut l = LinkedList::<usize>::new();
         assert_eq!(l.head, None);
         assert_eq!(l.len, 0);
@@ -113,7 +107,6 @@ mod tests {
         assert_eq!(l.len, 1);
         assert_eq!(l.pop_front(), Some(2));
 
-
         l.push_front(5);
         l.push_front(6);
         split.push_front(8);
@@ -122,6 +115,5 @@ mod tests {
         assert_eq!(split.pop_front(), Some(8));
         assert_eq!(split.pop_front(), Some(6));
         assert_eq!(split.pop_front(), Some(5));
-
     }
 }
