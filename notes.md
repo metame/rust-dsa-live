@@ -31,9 +31,9 @@ Also, great chance for me to practice more Rust and DSA stuff on a personal leve
 - binary search (slice)
 - linked list
 - doubly linked list
-- FiFo queue (backed by linked list)
 - rawvec (growable array)
 - array list/vec
+- FiFo queue (backed by linked list)
 - sorting algos (bubble, quick)
 - ring buffer
 - binary search tree
