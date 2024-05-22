@@ -68,8 +68,9 @@ impl<T> DoublyLinkedList<T> {
 
     fn pop_front(&mut self) -> Option<T> {
         if let Some(first) = self.first.take() {
-            first.lock().
-                map(|mut old_first| {
+            first
+                .lock()
+                .map(|mut old_first| {
                     if let Some(first_node) = old_first.next.take() {
                         self.first = Some(first_node.clone());
                         let mut first_node = first_node.lock().unwrap();
