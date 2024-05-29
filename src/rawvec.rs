@@ -3,20 +3,24 @@
 use std::alloc::{alloc, dealloc, realloc, Layout};
 use std::ptr::NonNull;
 
-struct RawVec<T> {
-    ptr: NonNull<T>,
+pub struct RawVec<T> {
+    pub ptr: NonNull<T>,
     cap: usize,
 }
 
 impl<T> RawVec<T> {
-    fn new() -> Self {
+    pub fn new() -> Self {
         RawVec {
             ptr: NonNull::dangling(),
             cap: 0,
         }
     }
 
-    fn grow(&mut self) {
+    pub fn cap(&self) -> usize {
+        self.cap
+    }
+
+    pub fn grow(&mut self) {
         let (new_cap, old_layout) = if self.cap == 0 {
             (5, None)
         } else {
