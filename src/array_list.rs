@@ -129,6 +129,14 @@ impl<T> Iterator for ArrayListIter<T> {
     }
 }
 
+impl<T> Drop for ArrayList<T> {
+    fn drop(&mut self) {
+        while let Some(v) = self.pop() {
+            drop(v);
+        }
+    }
+}
+
 mod tests {
     use super::*;
 
