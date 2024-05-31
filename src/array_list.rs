@@ -102,14 +102,14 @@ impl<T> IntoIterator for ArrayList<T> {
 }
 
 pub struct ArrayListIter<T> {
-    pos: usize,
+    ptr: *mut T,
     list: ArrayList<T>,
 }
 
 impl<T> ArrayListIter<T> {
     fn new(list: ArrayList<T>) -> Self {
         ArrayListIter {
-            pos: 0,
+            ptr: list.buf.ptr.as_ptr(),
             list,
         }
     }
@@ -119,12 +119,25 @@ impl<T> Iterator for ArrayListIter<T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
-        if self.pos < self.list.len {
-            let n = unsafe { ptr::read(self.list.ptr_at_offset(self.pos)) };
-            self.pos += 1;
+        if self.list.len > 0 {
+            let n = unsafe { ptr::read(self.ptr) };
+
+            self.list.len -= 1;
+            if self.list.len > 0 {
+                self.ptr = unsafe { self.ptr.offset(1) };
+            }
+
             Some(n)
         } else {
             None
+        }
+    }
+}
+
+impl<T> Drop for ArrayListIter<T> {
+    fn drop(&mut self) {
+        while let Some(v) = self.next() {
+            drop(v);
         }
     }
 }
@@ -165,6 +178,20 @@ mod tests {
         assert_eq!(l[5], 6);
         assert_eq!(l.len, 6);
         assert_eq!(l.into_iter().collect::<Vec<u8>>(), vec![10, 254, 25, 8, 9, 6]);
+    }
+
+    #[test]
+    fn string_list_works() {
+        let mut l = ArrayList::<String>::new();
+
+        l.push("hey".to_string());
+        l.push("you".to_string());
+        l.push("guys".to_string());
+
+        assert_eq!(l.len, 3);
+        assert_eq!(l.pop(), Some("guys".to_string()));
+        let mut i = l.into_iter();
+        assert_eq!(i.next(), Some("hey".to_string()));
     }
 
 }
