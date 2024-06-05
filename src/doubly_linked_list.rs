@@ -28,7 +28,7 @@ impl<T> Node<T> {
 }
 
 impl<T> DoublyLinkedList<T> {
-    fn new() -> Self {
+    pub fn new() -> Self {
         DoublyLinkedList {
             len: 0,
             first: None,
@@ -36,7 +36,7 @@ impl<T> DoublyLinkedList<T> {
         }
     }
 
-    fn push_front(&mut self, value: T) {
+    pub fn push_front(&mut self, value: T) {
         let mut n = Node::new(value);
         if let Some(old_first) = self.first.take() {
             n.next = Some(old_first.clone());
@@ -51,7 +51,7 @@ impl<T> DoublyLinkedList<T> {
         self.len += 1;
     }
 
-    fn push_back(&mut self, value: T) {
+    pub fn push_back(&mut self, value: T) {
         let mut n = Node::new(value);
         if let Some(old_last) = self.last.take() {
             n.prev = Some(old_last.clone());
@@ -66,7 +66,7 @@ impl<T> DoublyLinkedList<T> {
         self.len += 1;
     }
 
-    fn pop_front(&mut self) -> Option<T> {
+    pub fn pop_front(&mut self) -> Option<T> {
         if let Some(first) = self.first.take() {
             first
                 .lock()
@@ -91,7 +91,7 @@ impl<T> DoublyLinkedList<T> {
         }
     }
 
-    fn pop_back(&mut self) -> Option<T> {
+    pub fn pop_back(&mut self) -> Option<T> {
         if let Some(last) = self.last.take() {
             last.lock()
                 .map(|mut old_last| {
@@ -115,7 +115,7 @@ impl<T> DoublyLinkedList<T> {
         }
     }
 
-    fn append(&mut self, l: Self) {
+    pub fn append(&mut self, l: Self) {
         if let Some(last) = self.last.take() {
             last.lock()
                 .map(|mut old_last| {
