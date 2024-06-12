@@ -16,18 +16,19 @@ impl<T> RawVec<T> {
         }
     }
 
+    pub fn with_capacity(cap: usize) -> Self {
+        let mut rv = Self::new();
+
+        rv.grow_to_cap(cap, None);
+
+        rv
+    }
+
     pub fn cap(&self) -> usize {
         self.cap
     }
 
-    pub fn grow(&mut self) {
-        let (new_cap, old_layout) = if self.cap == 0 {
-            (5, None)
-        } else {
-            let layout = Layout::array::<T>(self.cap).unwrap();
-            (self.cap * 2, Some(layout))
-        };
-
+    fn grow_to_cap(&mut self, new_cap: usize, old_layout: Option<Layout>) {
         let layout = Layout::array::<T>(new_cap).unwrap();
 
         if let Some(old_layout) = old_layout {
@@ -43,6 +44,17 @@ impl<T> RawVec<T> {
         }
 
         self.cap = new_cap;
+    }
+
+    pub fn grow(&mut self) {
+        let (new_cap, old_layout) = if self.cap == 0 {
+            (5, None)
+        } else {
+            let layout = Layout::array::<T>(self.cap).unwrap();
+            (self.cap * 2, Some(layout))
+        };
+
+        self.grow_to_cap(new_cap, old_layout);
     }
 }
 
