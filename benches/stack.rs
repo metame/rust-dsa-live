@@ -1,4 +1,4 @@
-use criterion::{black_box, criterion_group, criterion_main, Criterion};
+use criterion::{criterion_group, criterion_main, BenchmarkId, Criterion};
 use rust_dsa::stack::{ArrayStack, LinkedStack, StdArrayStack, StdLinkedStack};
 
 fn array_stack(size: usize) {
@@ -33,11 +33,16 @@ fn std_linked_stack(size: usize) {
     while let Some(_) = s.pop() {}
 }
 
+
 fn stack_bench(c: &mut Criterion) {
-    c.bench_function("ArrayStack", |b| b.iter(|| array_stack(black_box(50))));
-    c.bench_function("LinkedStack", |b| b.iter(|| linked_stack(black_box(50))));
-    c.bench_function("StdArrayStack", |b| b.iter(|| std_array_stack(black_box(50))));
-    c.bench_function("StdLinkedStack", |b| b.iter(|| std_linked_stack(black_box(50))));
+    let mut group = c.benchmark_group("Stack");
+    for size in [25, 50, 100].iter() {
+
+        group.bench_with_input(BenchmarkId::new("ArrayStack", size), size, |b, size| b.iter(|| array_stack(*size)));
+        group.bench_with_input(BenchmarkId::new("LinkedStack", size), size, |b, size| b.iter(|| linked_stack(*size)));
+        group.bench_with_input(BenchmarkId::new("StdArrayStack", size), size, |b, size| b.iter(|| std_array_stack(*size)));
+        group.bench_with_input(BenchmarkId::new("StdLinkedStack", size), size, |b, size| b.iter(|| std_linked_stack(*size)));
+    }
 }
 
 criterion_group!(benches, stack_bench);
