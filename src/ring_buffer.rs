@@ -5,12 +5,6 @@ use std::ptr;
 
 use crate::rawvec::RawVec;
 
-/**
-push_back
-pop_front
-Index trait
- */
-
 pub struct RingBuffer<T> {
     head: usize,
     buf: RawVec<T>,
